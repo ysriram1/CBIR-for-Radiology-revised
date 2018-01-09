@@ -14,10 +14,10 @@ from numpy import uint8, double
 # files or only the dicom files based on the only_dicom parameter. Images are 
 # saved to a folder named images_store 
 def download_images(only_dicom=True, 
-                    images_loc='http://rasinsrv04.cstcis.cti.depaul.edu/all_images/all_tf/'):
+                    images_loc='add url for images'):
     
     # connect to the website
-    conn = urllib.urlopen('http://rasinsrv04.cstcis.cti.depaul.edu/all_images/all_tf/')
+    conn = urllib.urlopen(images_loc)
     url_html = conn.read()
     soup = BeautifulSoup(url_html, 'html.parser')
     

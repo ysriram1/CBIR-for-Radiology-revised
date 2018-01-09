@@ -24,7 +24,7 @@ seed = 99 # for randomized computations
 # files or only the dicom files based on the only_dicom parameter. Images are
 # saved to a folder named images_store
 def download_images(only_dicom=True,
-					images_loc='http://rasinsrv04.cstcis.cti.depaul.edu/all_images/all_tf/',
+					images_loc='add url for images',
 					folder_name = 'images_store'):
 
 	# connect to the website
