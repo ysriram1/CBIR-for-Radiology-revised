@@ -23,7 +23,7 @@ import pickle
 
 os.chdir('C:/Users/syarlag1.DPU/Desktop/paper/CBIR-for-Radiology/functions_for_database_CBIR')
 
-from CBIR_functions import * # reads in all the necessary functions for CBIR
+from CBIR_functions_for_py2_opencv2 import * # reads in all the necessary functions for CBIR
 
 # change these params as needed
 images_folder = 'C:/Users/syarlag1.DPU/Desktop/paper/CBIR-for-Radiology/images_sample'
