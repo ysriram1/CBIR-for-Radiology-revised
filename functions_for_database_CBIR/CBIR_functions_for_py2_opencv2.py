@@ -559,7 +559,7 @@ def combine_measures(local_dict, global_dict, weighting=0.5):
 
 
 # display retrieved images
-def return_images(image_sim_dist_dict, image_dict, use_threshold=True, threshold=0.3, k=5, distance=True):
+def return_images(image_sim_dist_dict, use_threshold=True, threshold=0.3, k=5, distance=True):
 
 	result_image_id_list = []
 	result_image_dist_list = []

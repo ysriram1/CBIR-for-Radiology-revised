@@ -96,8 +96,8 @@ query_BoW_arr =  bag_of_words(query_SIFT_feats, cluster_centers, query=True)
 dist_dict = calc_dist_sim(query_BoW_arr, database_BoW_dict, method='cosine')
 
 # PART J (k is the number of images to return)
-closest_images = return_images(dist_dict, database_dict, k=image_return_count, distance=True)
-farthest_images = return_images(dist_dict, database_dict, k=image_return_count, distance=False)
+closest_images = return_images(dist_dict, k=image_return_count, distance=True)
+farthest_images = return_images(dist_dict, k=image_return_count, distance=False)
 
 # save result as csv
 if save_files:
