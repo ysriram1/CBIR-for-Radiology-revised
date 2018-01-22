@@ -23,7 +23,7 @@ seed = 99 # for randomized computations
 # files or only the dicom files based on the only_dicom parameter. Images are
 # saved to a folder named images_store
 def download_images(only_dicom=True,
-					images_loc='add url for images',
+					images_loc='http://rasinsrv04.cstcis.cti.depaul.edu/all_images/all_tf/',
 					folder_name = 'images_store'):
 
 	# connect to the website
@@ -559,7 +559,7 @@ def combine_measures(local_dict, global_dict, weighting=0.5):
 
 
 # display retrieved images
-def return_images(image_sim_dist_dict, use_threshold=True, threshold=0.3, k=5, distance=True):
+def return_images(image_sim_dist_dict, image_dict, use_threshold=True, threshold=0.3, k=5, distance=True):
 
 	result_image_id_list = []
 	result_image_dist_list = []

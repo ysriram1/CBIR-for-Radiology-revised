@@ -23,20 +23,20 @@ import pandas as pd
 import pickle
 import numpy as np
 
-os.chdir('C:/Users/pdeshpa1.823WS2016-02/Desktop/CBIR/CBIR-for-Radiology-revised/functions_for_database_CBIR')
+os.chdir('C:/Users/syarlag1.DPU/Desktop/paper/CBIR-for-Radiology/functions_for_database_CBIR')
 
-from CBIR_functions_for_py3_opencv3 import * # reads in all the necessary functions for CBIR
+from CBIR_functions import * # reads in all the necessary functions for CBIR
 
 # change these params as needed
-images_folder = 'C:/Users/pdeshpa1.823WS2016-02/Desktop/CBIR/CBIR-for-Radiology-revised/images_sample'
+images_folder = 'C:/Users/syarlag1.DPU/Desktop/CBIR-for-Radiology/functions_for_database_CBIR/all_images_sample'
 images_percent_for_kmeans = 0.08
 cluster_count = 50
-query_image_id = '10_5'
+query_image_id = 'chest.png'
 save_files = False
 ellipse = False
 display_results = True
 image_return_count = 20 # maximum number of images to be returned; might be lower due to threshold
-threshold_ = 0.1 # what I chosen based on visual inspection of results
+threshold_ = 0.3 # what I chosen based on visual inspection of results
 
 # <------------------------The offine parts---------------------->
 # PART A (only run if NOT already downloaded)
@@ -89,7 +89,7 @@ database_BoW_dict = database_BoW_temp.T.to_dict('list'); del database_BoW_temp
 
 # PART F
 #query_image_arr = plt.imread('C:/Users/syarlag1.DPU/Desktop/paper/CBIR-for-Radiology/images_sample/random.jpg')
-query_image_arr = plt.imread(images_folder+'/'+query_image_id)
+query_image_arr = read_single_image(images_folder+'/'+query_image_id)
 
 # PART G
 query_SIFT_feats = sift(query_image_arr, ellipse=False)
@@ -119,5 +119,7 @@ if display_results:
     display_images(closest_images, images_folder)
 
 
+###### Drawing a Histogram #######
+plt.hist(list(dist_dict.values()), bins = 100)
 
-    
+##### Generating hist for entire data ####

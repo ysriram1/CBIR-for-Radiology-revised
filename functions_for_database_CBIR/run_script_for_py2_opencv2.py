@@ -23,7 +23,7 @@ import pickle
 
 os.chdir('C:/Users/syarlag1.DPU/Desktop/paper/CBIR-for-Radiology/functions_for_database_CBIR')
 
-from CBIR_functions_for_py2_opencv2 import * # reads in all the necessary functions for CBIR
+from CBIR_functions import * # reads in all the necessary functions for CBIR
 
 # change these params as needed
 images_folder = 'C:/Users/syarlag1.DPU/Desktop/paper/CBIR-for-Radiology/images_sample'
@@ -96,8 +96,8 @@ query_BoW_arr =  bag_of_words(query_SIFT_feats, cluster_centers, query=True)
 dist_dict = calc_dist_sim(query_BoW_arr, database_BoW_dict, method='cosine')
 
 # PART J (k is the number of images to return)
-closest_images = return_images(dist_dict, k=image_return_count, distance=True)
-farthest_images = return_images(dist_dict, k=image_return_count, distance=False)
+closest_images = return_images(dist_dict, database_dict, k=image_return_count, distance=True)
+farthest_images = return_images(dist_dict, database_dict, k=image_return_count, distance=False)
 
 # save result as csv
 if save_files:

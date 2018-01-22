@@ -24,7 +24,7 @@ seed = 99 # for randomized computations
 # files or only the dicom files based on the only_dicom parameter. Images are
 # saved to a folder named images_store
 def download_images(only_dicom=True,
-					images_loc='add url for images',
+					images_loc='http://rasinsrv04.cstcis.cti.depaul.edu/all_images/all_tf/',
 					folder_name = 'images_store'):
 
 	# connect to the website
@@ -123,6 +123,7 @@ def read_images_from_folder(images_loc):
 		except: # most likely due to non-dicom
 			try:
 				pixel_array_ = plt.imread(image_id)
+				pixel_array_ = uint8(255*((temp_arr - temp_arr.min()) / (temp_arr.max() - temp_arr.min())))
 				image_pixel_dict[image_id] = pixel_array_
 
 			except: continue
@@ -130,6 +131,27 @@ def read_images_from_folder(images_loc):
 	os.chdir('./..') # go back to parent dir
 
 	return image_pixel_dict
+
+# returns a pixel array after reading and normalizing a single image
+def read_single_image(image_loc):
+
+	try: # check if image is dicom
+		image_temp = dicom.read_file(image_loc) # read as dicom
+		pixel_array_ = image_temp.pixel_array
+		temp_arr = double(pixel_array_)
+		# normalize
+		pixel_array_ = uint8(255*((temp_arr - temp_arr.min()) / (temp_arr.max() - temp_arr.min())))
+
+	except: # most likely due to non-dicom
+		try:
+			pixel_array_ = plt.imread(image_loc)
+			# normalize
+			temp_arr = double(pixel_array_)
+			pixel_array_ = uint8(255*((temp_arr - temp_arr.min()) / (temp_arr.max() - temp_arr.min())))
+		except:
+			print('Failed to read image!')
+
+	return pixel_array_
 
 ############### FUNCTIONS BELOW FOR EXTRACTING IMAGE DESCRIPTORS ###############
 # returns a vector of global features (Haralick + average intensity)
