@@ -532,15 +532,21 @@ def jeffery_divergence(query_arr,train_mat):
 
 # NOTE: for the three measures below, come up with a vectorized implementation
 def chi2(query_arr, train_mat): # chi-squared
-	# no normalization
+	# normalization
+	query_arr = query_arr/float(np.sum(query_arr))
+	train_mat = np.divide(train_mat.T, np.sum(train_mat,1)).T
 	return np.array([cv2.compareHist(query_arr, arr,1) for arr in train_mat])
 
 def intersection(query_arr, train_mat):
-	# no normalization
+	# normalization
+	query_arr = query_arr/float(np.sum(query_arr))
+	train_mat = np.divide(train_mat.T, np.sum(train_mat,1)).T
 	return np.array([cv2.compareHist(query_arr, arr,2) for arr in train_mat])
 
 def bhattacharyya(query_arr, train_mat):
-	# no normalization
+	# normalization
+	query_arr = query_arr/float(np.sum(query_arr))
+	train_mat = np.divide(train_mat.T, np.sum(train_mat,1)).T
 	return np.array([cv2.compareHist(query_arr, arr,3) for arr in train_mat])
 
 # returns a vector of distance to each of the training arrays from query array
@@ -594,6 +600,19 @@ def calc_dist_sim(query_feats, image_feats_dict, method='cosine'):
 
 		# use jesen-shannon divergence to find distance to each image from query
 		distances = jensen_shannon_div(np.array(query_feats), np.array(list(image_feats_dict.values())))
+		# add to the dictionary
+		image_sim_dist_dict = dict((key, val) for key,val in zip(list(image_feats_dict.keys()),distances))
+
+	if method == 'JF':
+
+		# use jesen-shannon divergence to find distance to each image from query
+		distances = jeffery_divergence(np.array(query_feats), np.array(list(image_feats_dict.values())))
+		# add to the dictionary
+		image_sim_dist_dict = dict((key, val) for key,val in zip(list(image_feats_dict.keys()),distances))
+
+	if method == 'intersection':
+
+		distances = intersection(np.array(query_feats), np.array(list(image_feats_dict.values())))
 		# add to the dictionary
 		image_sim_dist_dict = dict((key, val) for key,val in zip(list(image_feats_dict.keys()),distances))
 
