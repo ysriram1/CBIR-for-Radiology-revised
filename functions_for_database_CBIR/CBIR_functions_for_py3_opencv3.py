@@ -511,6 +511,39 @@ def jensen_shannon_div(query_arr,train_mat):
 	return JS_mat
 
 # returns a vector of distance to each of the training arrays from query array
+# using jeffery divergence
+def jeffery_divergence(query_arr,train_mat):
+
+	# normalize arrays so that they become probability distributions
+	query_arr = query_arr/float(np.sum(query_arr))
+	train_mat = np.divide(train_mat.T, np.sum(train_mat,1)).T
+	query_mat = repmat(query_arr, len(train_mat), 1)
+
+	diff_part = query_mat - train_mat
+	log_part = np.log(query_mat) - np.log(train_mat)
+
+	# convert all nans to 0
+	diff_part[np.isnan(diff_part)] = 0
+	log_part[np.isnan(log_part)] = 0
+
+	JV_div = np.multiply(diff_part, log_part)
+
+	return JV_div.sum(1) # since each row is a different image
+
+# NOTE: for the three measures below, come up with a vectorized implementation
+def chi2(query_arr, train_mat): # chi-squared
+	# no normalization
+	return np.array([cv2.compareHist(query_arr, arr,1) for arr in train_mat])
+
+def intersection(query_arr, train_mat):
+	# no normalization
+	return np.array([cv2.compareHist(query_arr, arr,2) for arr in train_mat])
+
+def bhattacharyya(query_arr, train_mat):
+	# no normalization
+	return np.array([cv2.compareHist(query_arr, arr,3) for arr in train_mat])
+
+# returns a vector of distance to each of the training arrays from query array
 # using Euclidean Distance
 def euclidean_dist(query_arr, train_mat):
 
