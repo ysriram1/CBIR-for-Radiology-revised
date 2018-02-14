@@ -616,6 +616,18 @@ def calc_dist_sim(query_feats, image_feats_dict, method='cosine'):
 		# add to the dictionary
 		image_sim_dist_dict = dict((key, val) for key,val in zip(list(image_feats_dict.keys()),distances))
 
+	if method == 'chi2':
+
+		distances = chi2(np.array(query_feats), np.array(list(image_feats_dict.values())))
+		# add to the dictionary
+		image_sim_dist_dict = dict((key, val) for key,val in zip(list(image_feats_dict.keys()),distances))
+
+	if method == 'bhattacharyya':
+
+		distances = bhattacharyya(np.array(query_feats), np.array(list(image_feats_dict.values())))
+		# add to the dictionary
+		image_sim_dist_dict = dict((key, val) for key,val in zip(list(image_feats_dict.keys()),distances))
+
 	# uses hamming distance as metric to find the closest keypoints
 	# NOTE: mainly used for ORB
 	if method == 'force_matching':
