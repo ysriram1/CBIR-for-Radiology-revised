@@ -535,18 +535,22 @@ def chi2(query_arr, train_mat): # chi-squared
 	# normalization
 	query_arr = query_arr/float(np.sum(query_arr))
 	train_mat = np.divide(train_mat.T, np.sum(train_mat,1)).T
+	query_arr = np.float32(query_arr); trian_mat = np.float32(train_mat)
 	return np.array([cv2.compareHist(query_arr, arr,1) for arr in train_mat])
 
+# returns the NEGATIVE of the intersection (so that it is a distance)
 def intersection(query_arr, train_mat):
 	# normalization
 	query_arr = query_arr/float(np.sum(query_arr))
 	train_mat = np.divide(train_mat.T, np.sum(train_mat,1)).T
-	return np.array([cv2.compareHist(query_arr, arr,2) for arr in train_mat])
+	query_arr = np.float32(query_arr); trian_mat = np.float32(train_mat)
+	return np.array([-cv2.compareHist(query_arr, arr,2) for arr in train_mat])
 
 def bhattacharyya(query_arr, train_mat):
 	# normalization
 	query_arr = query_arr/float(np.sum(query_arr))
 	train_mat = np.divide(train_mat.T, np.sum(train_mat,1)).T
+	query_arr = np.float32(query_arr); trian_mat = np.float32(train_mat)
 	return np.array([cv2.compareHist(query_arr, arr,3) for arr in train_mat])
 
 # returns a vector of distance to each of the training arrays from query array
@@ -579,6 +583,7 @@ def cosine_dist(query_arr, train_mat):
 def calc_dist_sim(query_feats, image_feats_dict, method='cosine'):
 
 	image_sim_dist_dict = {}
+	query_feats = np.float32(query_feats) # some opencv functions only accept float32
 
 	# cosine distance NOT similarity
 	if method == 'cosine':
@@ -612,19 +617,19 @@ def calc_dist_sim(query_feats, image_feats_dict, method='cosine'):
 
 	if method == 'intersection':
 
-		distances = intersection(np.array(query_feats), np.array(list(image_feats_dict.values())))
+		distances = intersection(np.array(query_feats), np.float32(list(image_feats_dict.values())))
 		# add to the dictionary
 		image_sim_dist_dict = dict((key, val) for key,val in zip(list(image_feats_dict.keys()),distances))
 
 	if method == 'chi2':
 
-		distances = chi2(np.array(query_feats), np.array(list(image_feats_dict.values())))
+		distances = chi2(np.array(query_feats), np.float32(list(image_feats_dict.values())))
 		# add to the dictionary
 		image_sim_dist_dict = dict((key, val) for key,val in zip(list(image_feats_dict.keys()),distances))
 
 	if method == 'bhattacharyya':
 
-		distances = bhattacharyya(np.array(query_feats), np.array(list(image_feats_dict.values())))
+		distances = bhattacharyya(np.array(query_feats), np.float32(list(image_feats_dict.values())))
 		# add to the dictionary
 		image_sim_dist_dict = dict((key, val) for key,val in zip(list(image_feats_dict.keys()),distances))
 
@@ -709,7 +714,8 @@ def return_images(image_sim_dist_dict, use_threshold=True, threshold=0.3, k=5, d
 	return zip(result_image_id_list, result_image_dist_list)
 
 # displays the images from the image list
-def display_images(image_results, image_folder):
+# NOTE: need to remove image_BOW (really hacky now)
+def display_images(image_results, image_folder, image_BOW_dict):
 
 		img_lst = list(image_results)
 
@@ -729,6 +735,13 @@ def display_images(image_results, image_folder):
 				image_temp = plt.imread(image_folder + '/' + image_id)
 				img = uint8(255*((image_temp - image_temp.min()) / (image_temp.max() - image_temp.min())))
 
+			# get image sift count, if possible
+			try:
+				sift_count = sum(image_BOW_dict[image_id])
+				print(sift_count)
+				image_dist_total += ' feats: ' + str(sift_count)
+			except:
+				print('unable to output sift count')
 			# display the image
 			plt.figure()
 			plt.imshow(img, cmap='gray')
