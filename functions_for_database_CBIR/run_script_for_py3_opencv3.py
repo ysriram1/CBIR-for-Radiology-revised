@@ -25,18 +25,18 @@ import numpy as np
 
 os.chdir('C:/Users/syarlag1.DPU/Desktop/paper/CBIR-for-Radiology/functions_for_database_CBIR')
 
-from CBIR_functions import * # reads in all the necessary functions for CBIR
+#from CBIR_functions import * # reads in all the necessary functions for CBIR
 
 # change these params as needed
 images_folder = 'C:/Users/syarlag1.DPU/Desktop/CBIR-for-Radiology/functions_for_database_CBIR/all_images_sample'
 images_percent_for_kmeans = 0.08
 cluster_count = 50
-query_image_id = 'chest.png'
+query_image_id = '2041_1_trachel.jpg'
 save_files = False
 ellipse = False
 display_results = True
 image_return_count = 20 # maximum number of images to be returned; might be lower due to threshold
-threshold_ = 0.3 # what I chosen based on visual inspection of results
+threshold_ = 1 # what I chosen based on visual inspection of results
 
 # <------------------------The offine parts---------------------->
 # PART A (only run if NOT already downloaded)
@@ -98,7 +98,7 @@ query_SIFT_feats = sift(query_image_arr, ellipse=False)
 query_BoW_arr =  bag_of_words(query_SIFT_feats, cluster_centers, query=True)
 
 # PART I (using cosine distance NOT similarity)
-dist_dict = calc_dist_sim(query_BoW_arr, database_BoW_dict, method='cosine')
+dist_dict = calc_dist_sim(query_BoW_arr, database_BoW_dict, method='bhattacharyya')
 
 # PART J (k is the number of images to return)
 closest_images = return_images(dist_dict, use_threshold=True, threshold=threshold_, k=image_return_count, distance=True)
@@ -116,7 +116,7 @@ if save_files:
 
 # PART K
 if display_results: 
-    display_images(closest_images, images_folder)
+    display_images(closest_images, images_folder, database_BoW_dict)
 
 
 ###### Drawing a Histogram #######
